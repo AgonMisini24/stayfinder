@@ -1,69 +1,145 @@
-import Image from "next/image";
+"use client";
+
+import { useState } from "react";
 
 export default function Home() {
+  const [guests, setGuests] = useState(1);
+  const [destination, setDestination] = useState("");
+  const [checkin, setCheckin] = useState("");
+  const [checkout, setCheckout] = useState("");
+
+  function handleSearch() {
+    // Make sure all required fields are filled in
+    if (!destination.trim() || !checkin || !checkout) {
+      alert("Please enter a destination and both dates.");
+      return;
+    }
+
+    // Make sure the check-out date is after check-in
+    if (checkout <= checkin) {
+      alert("Check-out must be after check-in.");
+      return;
+    }
+
+    // Show the search information
+    alert(
+      `Searching for stays in ${destination}
+Check-in: ${checkin}
+Check-out: ${checkout}
+Guests: ${guests}`,
+    );
+  }
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
+    <main className="min-h-screen bg-white">
+      {/* HEADER */}
+      <header className="flex items-center justify-between border-b border-gray-200 px-8 py-5">
+        {/* Logo */}
+        <h1 className="text-2xl font-bold text-rose-500">stayfinder</h1>
+
+        {/* Navigation */}
+        <nav className="flex gap-8 text-gray-700">
+          <a href="#">Homes</a>
+          <a href="#">Experiences</a>
+          <a href="#">Services</a>
+        </nav>
+
+        {/* Login button */}
+        <button
+          type="button"
+          className="rounded-full border border-gray-300 px-5 py-2 text-sm font-medium"
+        >
+          Log in
+        </button>
+      </header>
+
+      {/* SEARCH SECTION */}
+      <section className="px-6 py-10">
+        <div className="mx-auto flex max-w-4xl flex-wrap items-center justify-between gap-4 rounded-3xl border border-gray-200 p-4 shadow-lg">
+          {/* Destination */}
+          <div>
+            <label htmlFor="destination" className="block text-sm font-bold">
+              Where
+            </label>
+
+            <input
+              id="destination"
+              type="text"
+              placeholder="Search destinations"
+              value={destination}
+              onChange={(e) => setDestination(e.target.value)}
+              className="w-40 text-sm text-gray-700 outline-none"
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+          </div>
+
+          {/* Check-in */}
+          <div>
+            <label htmlFor="checkin" className="block text-sm font-bold">
+              Check in
+            </label>
+
+            <input
+              id="checkin"
+              type="date"
+              value={checkin}
+              onChange={(e) => setCheckin(e.target.value)}
+              className="text-sm text-gray-700 outline-none"
+            />
+          </div>
+
+          {/* Check-out */}
+          <div>
+            <label htmlFor="checkout" className="block text-sm font-bold">
+              Check out
+            </label>
+
+            <input
+              id="checkout"
+              type="date"
+              value={checkout}
+              onChange={(e) => setCheckout(e.target.value)}
+              className="text-sm text-gray-700 outline-none"
+            />
+          </div>
+
+          {/* Guest counter */}
+          <div>
+            <p className="text-sm font-bold">Who</p>
+
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={() => setGuests((current) => current - 1)}
+                disabled={guests <= 1}
+                className="rounded-full border border-gray-300 px-3 py-1 disabled:opacity-30"
+              >
+                −
+              </button>
+
+              <span className="text-sm text-gray-700">
+                {guests} {guests === 1 ? "guest" : "guests"}
+              </span>
+
+              <button
+                type="button"
+                onClick={() => setGuests((current) => current + 1)}
+                className="rounded-full border border-gray-300 px-3 py-1"
+              >
+                +
+              </button>
+            </div>
+          </div>
+
+          {/* Search button */}
+          <button
+            type="button"
+            onClick={handleSearch}
+            className="rounded-full bg-rose-500 px-6 py-3 font-semibold text-white hover:bg-rose-600"
           >
-            Documentation
-          </a>
+            Search
+          </button>
         </div>
-      </main>
-    </div>
+      </section>
+    </main>
   );
 }
