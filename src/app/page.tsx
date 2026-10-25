@@ -2,28 +2,60 @@
 
 import { useState } from "react";
 
+// Demo accommodation data
+// These are fictional properties used for learning React.
+const properties = [
+  {
+    id: 1,
+    name: "Modern city apartment",
+    location: "Demo location A",
+    price: 120,
+    rating: 4.8,
+  },
+  {
+    id: 2,
+    name: "Cozy mountain cabin",
+    location: "Demo location B",
+    price: 95,
+    rating: 4.9,
+  },
+  {
+    id: 3,
+    name: "Luxury beach villa",
+    location: "Demo location C",
+    price: 250,
+    rating: 4.7,
+  },
+  {
+    id: 4,
+    name: "Charming countryside home",
+    location: "Demo location D",
+    price: 85,
+    rating: 4.6,
+  },
+];
+
 export default function Home() {
-  const [guests, setGuests] = useState(1);
+  // Search form state
   const [destination, setDestination] = useState("");
   const [checkin, setCheckin] = useState("");
   const [checkout, setCheckout] = useState("");
+  const [guests, setGuests] = useState(1);
 
+  // Handle search button click
   function handleSearch() {
-    // Make sure all required fields are filled in
     if (!destination.trim() || !checkin || !checkout) {
       alert("Please enter a destination and both dates.");
       return;
     }
 
-    // Make sure the check-out date is after check-in
     if (checkout <= checkin) {
       alert("Check-out must be after check-in.");
       return;
     }
 
-    // Show the search information
     alert(
-      `Searching for stays in ${destination}
+      `Searching for stays in ${destination.trim()}
 Check-in: ${checkin}
 Check-out: ${checkout}
 Guests: ${guests}`,
@@ -138,6 +170,49 @@ Guests: ${guests}`,
           >
             Search
           </button>
+        </div>
+      </section>
+
+      {/* PROPERTY LISTINGS */}
+      <section className="mx-auto max-w-7xl px-6 py-10">
+        <h2 className="mb-6 text-2xl font-bold text-gray-900">
+          Explore places to stay
+        </h2>
+
+        {/* Responsive property grid */}
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {properties.map((property) => (
+            <article
+              key={property.id}
+              className="overflow-hidden rounded-2xl border border-gray-200"
+            >
+              {/* Image placeholder */}
+              <div className="flex h-56 items-center justify-center bg-gray-200 text-gray-500">
+                Property photo
+              </div>
+
+              {/* Property details */}
+              <div className="p-4">
+                <div className="flex items-center justify-between gap-2">
+                  <h3 className="font-semibold text-gray-900">
+                    {property.name}
+                  </h3>
+
+                  <span className="whitespace-nowrap text-sm text-gray-700">
+                    ★ {property.rating}
+                  </span>
+                </div>
+
+                <p className="mt-1 text-sm text-gray-500">
+                  {property.location}
+                </p>
+
+                <p className="mt-3 text-gray-900">
+                  <span className="font-bold">${property.price}</span> / night
+                </p>
+              </div>
+            </article>
+          ))}
         </div>
       </section>
     </main>
